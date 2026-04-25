@@ -45,7 +45,7 @@ export class PlaylistService {
         categoryMap.get(channel.category_id) || 'Uncategorized';
       const streamUrl = `${baseUrl}/live/${username}/${password}/${channel.stream_id}.ts`;
 
-      m3u += `#EXTINF:-1 tvg-id="${channel.epg_channel_id || ''}" tvg-name="${channel.name}" tvg-logo="${channel.stream_icon || ''}" group-title="${groupTitle}",${channel.name}\n`;
+      m3u += `#EXTINF:-1 group-title="${groupTitle}",${channel.name}\n`;
       m3u += `${streamUrl}\n`;
     }
 

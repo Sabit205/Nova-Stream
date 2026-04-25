@@ -23,7 +23,7 @@ export class StreamController {
     // Extract stream_id from filename (e.g., "123.ts" -> 123)
     const streamId = parseInt(streamFile.replace(/\.\w+$/, ''), 10);
     if (isNaN(streamId)) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ error: 'Invalid stream ID' });
+      return res.status(HttpStatus.BAD_REQUEST).end();
     }
 
     const result = await this.streamService.validateAndCreateToken(
@@ -33,7 +33,7 @@ export class StreamController {
     );
 
     if (!result.valid) {
-      return res.status(HttpStatus.FORBIDDEN).json({ error: result.error });
+      return res.status(HttpStatus.FORBIDDEN).end();
     }
 
     // Redirect to auth endpoint with token
@@ -57,7 +57,7 @@ export class StreamController {
     );
 
     if (!result.valid) {
-      return res.status(HttpStatus.FORBIDDEN).json({ error: result.error });
+      return res.status(HttpStatus.FORBIDDEN).end();
     }
 
     // Redirect to real HLS stream URL

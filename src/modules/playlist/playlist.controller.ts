@@ -27,7 +27,7 @@ export class PlaylistController {
       return res.status(HttpStatus.UNAUTHORIZED).send('Invalid credentials');
     }
 
-    res.setHeader('Content-Type', 'audio/x-mpegurl');
+    res.setHeader('Content-Type', 'text/plain');
     res.setHeader(
       'Content-Disposition',
       `attachment; filename="playlist.m3u"`,
