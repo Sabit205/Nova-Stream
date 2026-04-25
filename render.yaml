@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: novastream
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: HMAC_SECRET
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: BASE_URL
+        sync: false
+      - key: NODE_ENV
+        value: production

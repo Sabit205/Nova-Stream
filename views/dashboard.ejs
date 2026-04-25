@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaStream Admin - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h2>Dashboard</h2>
+        <p>Overview of your NovaStream IPTV system</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value"><%= stats.userCount %></div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value"><%= stats.activeUsers %></div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">📺</div>
+        <div class="stat-value"><%= stats.channelCount %></div>
+        <div class="stat-label">Channels</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon">📁</div>
+        <div class="stat-value"><%= stats.categoryCount %></div>
+        <div class="stat-label">Categories</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom: 16px; font-size: 16px;">API Quick Reference</h3>
+      <table>
+        <tr>
+          <td style="font-weight: 600; color: var(--text-primary); width: 140px;">Xtream Login</td>
+          <td><code class="code-block"><%= baseUrl %>/player_api.php?username=xxx&password=xxx</code></td>
+        </tr>
+        <tr>
+          <td style="font-weight: 600; color: var(--text-primary);">Categories</td>
+          <td><code class="code-block"><%= baseUrl %>/player_api.php?username=xxx&password=xxx&action=get_live_categories</code></td>
+        </tr>
+        <tr>
+          <td style="font-weight: 600; color: var(--text-primary);">Streams</td>
+          <td><code class="code-block"><%= baseUrl %>/player_api.php?username=xxx&password=xxx&action=get_live_streams</code></td>
+        </tr>
+        <tr>
+          <td style="font-weight: 600; color: var(--text-primary);">M3U Playlist</td>
+          <td><code class="code-block"><%= baseUrl %>/get.php?username=xxx&password=xxx&type=m3u</code></td>
+        </tr>
+        <tr>
+          <td style="font-weight: 600; color: var(--text-primary);">Stream URL</td>
+          <td><code class="code-block"><%= baseUrl %>/live/{user}/{pass}/{stream_id}.ts</code></td>
+        </tr>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('nav-dashboard').classList.add('active');
+  </script>
+</body>
+</html>

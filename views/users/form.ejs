@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaStream Admin - <%= user && user._id ? 'Edit' : 'New' %> User</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('../partials/sidebar') %>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h2><%= user && user._id ? 'Edit' : 'New' %> User</h2>
+        <p><%= user && user._id ? 'Update user account details' : 'Create a new IPTV subscriber' %></p>
+      </div>
+      <a href="/admin/users" class="btn btn-secondary">← Back to Users</a>
+    </div>
+
+    <% if (error) { %>
+      <div class="error-msg"><%= error %></div>
+    <% } %>
+
+    <div class="card">
+      <form method="POST" action="<%= user && user._id ? '/admin/users/' + user._id : '/admin/users' %>">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" value="<%= user ? user.username || '' : '' %>" required placeholder="e.g. john_doe">
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" <%= user && user._id ? '' : 'required' %> placeholder="<%= user && user._id ? 'Leave blank to keep current' : 'Enter password' %>">
+            <% if (user && user._id) { %>
+              <div class="form-hint">Leave blank to keep current password</div>
+            <% } %>
+          </div>
+
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+              <option value="Active" <%= user && user.status === 'Active' ? 'selected' : '' %>>Active</option>
+              <option value="Disabled" <%= user && user.status === 'Disabled' ? 'selected' : '' %>>Disabled</option>
+              <option value="Banned" <%= user && user.status === 'Banned' ? 'selected' : '' %>>Banned</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Max Connections</label>
+            <input type="number" name="max_connections" value="<%= user ? user.max_connections || 1 : 1 %>" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="date" name="exp_date_display" id="expDateDisplay" 
+                   value="<%= user && user.exp_date ? new Date(user.exp_date * 1000).toISOString().split('T')[0] : new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0] %>">
+            <input type="hidden" name="exp_date" id="expDateUnix" 
+                   value="<%= user ? user.exp_date || Math.floor((Date.now() + 30*24*60*60*1000) / 1000) : Math.floor((Date.now() + 30*24*60*60*1000) / 1000) %>">
+            <div class="form-hint">Account will expire on this date</div>
+          </div>
+
+          <div class="form-group">
+            <label>Trial</label>
+            <select name="is_trial">
+              <option value="0" <%= !user || user.is_trial === '0' ? 'selected' : '' %>>No</option>
+              <option value="1" <%= user && user.is_trial === '1' ? 'selected' : '' %>>Yes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><%= user && user._id ? 'Update User' : 'Create User' %></button>
+          <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('nav-users').classList.add('active');
+
+    // Convert date picker to unix timestamp
+    const dateInput = document.getElementById('expDateDisplay');
+    const unixInput = document.getElementById('expDateUnix');
+    dateInput.addEventListener('change', function() {
+      const d = new Date(this.value);
+      unixInput.value = Math.floor(d.getTime() / 1000);
+    });
+  </script>
+</body>
+</html>

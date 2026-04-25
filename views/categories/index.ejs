@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaStream Admin - Categories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('../partials/sidebar') %>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h2>Categories</h2>
+        <p>Manage channel categories</p>
+      </div>
+      <a href="/admin/categories/new" class="btn btn-primary">+ Add Category</a>
+    </div>
+
+    <div class="card">
+      <% if (categories.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon">📁</div>
+          <p>No categories yet. Create your first category.</p>
+          <a href="/admin/categories/new" class="btn btn-primary">+ Add Category</a>
+        </div>
+      <% } else { %>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Category ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% categories.forEach(cat => { %>
+                <tr>
+                  <td><%= cat.category_id %></td>
+                  <td style="color: var(--text-primary); font-weight: 600;"><%= cat.category_name %></td>
+                  <td>
+                    <div class="actions">
+                      <a href="/admin/categories/<%= cat._id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+                      <form method="POST" action="/admin/categories/<%= cat._id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this category?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <script>document.getElementById('nav-categories').classList.add('active');</script>
+</body>
+</html>

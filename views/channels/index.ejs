@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaStream Admin - Channels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('../partials/sidebar') %>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h2>Channels</h2>
+        <p>Manage live IPTV channels</p>
+      </div>
+      <a href="/admin/channels/new" class="btn btn-primary">+ Add Channel</a>
+    </div>
+
+    <div class="card">
+      <% if (channels.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon">📺</div>
+          <p>No channels yet. Add your first channel.</p>
+          <a href="/admin/channels/new" class="btn btn-primary">+ Add Channel</a>
+        </div>
+      <% } else { %>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Channel</th>
+                <th>Stream ID</th>
+                <th>Category</th>
+                <th>Stream URL</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% const catMap = {}; categories.forEach(c => catMap[c.category_id] = c.category_name); %>
+              <% channels.forEach(ch => { %>
+                <tr>
+                  <td><%= ch.num %></td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <% if (ch.stream_icon) { %>
+                        <img src="<%= ch.stream_icon %>" alt="" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover; background: var(--bg-input);">
+                      <% } %>
+                      <span style="color: var(--text-primary); font-weight: 600;"><%= ch.name %></span>
+                    </div>
+                  </td>
+                  <td><%= ch.stream_id %></td>
+                  <td><span class="badge badge-active"><%= catMap[ch.category_id] || ch.category_id %></span></td>
+                  <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= ch.stream_url %></td>
+                  <td>
+                    <div class="actions">
+                      <a href="/admin/channels/<%= ch._id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+                      <form method="POST" action="/admin/channels/<%= ch._id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this channel?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <script>document.getElementById('nav-channels').classList.add('active');</script>
+</body>
+</html>

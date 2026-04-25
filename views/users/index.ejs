@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaStream Admin - Users</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('../partials/sidebar') %>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h2>Users</h2>
+        <p>Manage IPTV subscriber accounts</p>
+      </div>
+      <a href="/admin/users/new" class="btn btn-primary">+ Add User</a>
+    </div>
+
+    <div class="card">
+      <% if (users.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon">👥</div>
+          <p>No users yet. Create your first IPTV user.</p>
+          <a href="/admin/users/new" class="btn btn-primary">+ Add User</a>
+        </div>
+      <% } else { %>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Status</th>
+                <th>Expiry</th>
+                <th>Max Connections</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach(user => { %>
+                <% const now = Math.floor(Date.now() / 1000); %>
+                <% const isExpired = user.exp_date < now; %>
+                <tr>
+                  <td style="color: var(--text-primary); font-weight: 600;"><%= user.username %></td>
+                  <td>
+                    <% if (isExpired) { %>
+                      <span class="badge badge-expired">Expired</span>
+                    <% } else if (user.status === 'Active') { %>
+                      <span class="badge badge-active">Active</span>
+                    <% } else if (user.status === 'Disabled') { %>
+                      <span class="badge badge-disabled">Disabled</span>
+                    <% } else { %>
+                      <span class="badge badge-banned">Banned</span>
+                    <% } %>
+                  </td>
+                  <td><%= new Date(user.exp_date * 1000).toLocaleDateString() %></td>
+                  <td><%= user.max_connections %></td>
+                  <td><%= new Date(user.created_at * 1000).toLocaleDateString() %></td>
+                  <td>
+                    <div class="actions">
+                      <a href="/admin/users/<%= user._id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+                      <form method="POST" action="/admin/users/<%= user._id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this user?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <script>document.getElementById('nav-users').classList.add('active');</script>
+</body>
+</html>
